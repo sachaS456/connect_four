@@ -169,3 +169,61 @@ def detecter4verticalPlateau(p:list, col:int)->list:
             for i in range(l-a, l):
                 lst.append(p[i][c])
     return lst
+
+def detecter4diagonaleDirectePlateau(p:dict, col:int)->list:
+    """
+    Détecte s'il y a 4 pions alignés en diagonale Directe
+
+    :param p: plateau à vérifier
+    :param col: couleur à vérifier
+    :return: la list est vide il n’y a aucune série de 4 pions alignés en diagonale Directe, sinon une liste de pions de la couleur donnée en paramètre qui sont alignés par 4
+    """
+
+    if type_plateau(p) == False:
+        raise TypeError("detecter4diagonaleDirectePlateau : Le premier paramètre ne correspond pas à un plateau")
+
+    if type(col) != int:
+        raise TypeError("detecter4diagonaleDirectePlateau : le second paramètre n’est pas un entier")
+
+    if col not in const.COULEURS:
+        raise ValueError(f"detecter4diagonaleDirectePlateau : La valeur de la couleur {col} n’est pas correcte")
+
+    lst = []
+    for diago in range(1, 4):
+        #print()
+        loc = 0
+        a = 0
+        while loc < const.NB_LINES - (diago-1) and a < 4:
+
+            if p[loc][loc+diago] == None:
+                a = 0
+            elif p[loc][loc + diago][const.COULEUR] == col:
+                a += 1
+            else:
+                a = 0
+            #print(loc, loc + diago, a)
+            loc+=1
+
+        if a >= 4:
+            for i in range(loc-a, loc):
+                lst.append(p[i][i + diago])
+
+    for diago in range(0, 3):
+        #print()
+        loc = 0
+        a = 0
+        while loc < const.NB_LINES - diago and a < 4:
+
+            if p[loc + diago][loc] == None:
+                a = 0
+            elif p[loc + diago][loc][const.COULEUR] == col:
+                a += 1
+            else:
+                a = 0
+            #print(loc + diago, loc, a)
+            loc += 1
+
+        if a >= 4:
+            for i in range(loc-a, loc):
+                lst.append(p[i+diago][i])
+    return lst
