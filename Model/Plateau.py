@@ -34,4 +34,16 @@ def type_plateau(plateau: list) -> bool:
         return False
     return True
 
+def construirePlateau()->list:
+    """
+    Créé un plateau de taille const.NB_LINES lignes et const.NB_COLUMNS colonnes
+
+    :return: un tableau représentant un plateau
+    """
+    lst = []
+    for i in range(const.NB_LINES):
+        lst.append([])
+        for j in range(const.NB_COLUMNS):
+            lst[i].append(None)
+    return lst
 
