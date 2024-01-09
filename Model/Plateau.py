@@ -74,3 +74,26 @@ def placerPionPlateau(p:list, pion:dict, nc:int)->int:
 
     p[i][nc] = pion
     return i
+
+
+def toStringPlateau(p: list) -> str:
+    """
+    Converti le plateau de tableau en chaîne de caractère affichable
+    :param p: plateau
+    :return: chaîne de caractère représentant le plateau
+    """
+    r = ""
+    for i in range(const.NB_LINES):
+        r += "|"
+        for j in range(const.NB_COLUMNS):
+            case = p[i][j]
+            if case == None:
+                case = " "
+            elif case[const.COULEUR] == const.ROUGE:
+                case = "\x1B[41m \x1B[0m"
+            elif case[const.COULEUR] == const.JAUNE:
+                case = "\x1B[43m \x1B[0m"
+
+            r += f"{case}|"
+        r+="\n"
+    return r
