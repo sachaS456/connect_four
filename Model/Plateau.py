@@ -97,3 +97,38 @@ def toStringPlateau(p: list) -> str:
             r += f"{case}|"
         r+="\n"
     return r
+
+def detecter4horizontalPlateau(p:list, col:int)->list:
+    """
+    Detecte s'il y a 4 pions alignés horizontalements
+
+    :param p: plateau à vérifier
+    :param col: couleur à vérifier
+    :return: la list est vide il n’y a aucune série de 4 pions alignés horizontalement, sinon une liste de pions de la couleur donnée en paramètre qui sont alignés par 4
+    """
+    if type_plateau(p) == False:
+        raise TypeError("detecter4horizontalPlateau : Le premier paramètre ne correspond pas à un plateau")
+
+    if type(col) != int:
+        raise TypeError("detecter4horizontalPlateau : le second paramètre n’est pas un entier")
+
+    if col not in const.COULEURS:
+        raise ValueError(f"détecter4horizontalPlateau : La valeur de la couleur {col} n’est pas correcte")
+
+    lst = []
+    for l in range(const.NB_LINES):
+        c = 0
+        a = 0
+        while a < 4 and c < const.NB_COLUMNS:
+            if p[l][c] == None:
+                a = 0
+            elif p[l][c][const.COULEUR] == col:
+                a+= 1
+            else:
+                a = 0
+            c += 1
+
+        if a >= 4:
+            for i in range(c-a, c):
+                lst.append(p[l][i])
+    return lst
