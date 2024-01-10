@@ -300,3 +300,75 @@ def getPionsGagnantsPlateau(p:dict)->list:
     lst += detecter4horizontalPlateau(p, const.ROUGE) + detecter4verticalPlateau(p, const.ROUGE) + detecter4diagonaleDirectePlateau(p, const.ROUGE) + detecter4diagonaleIndirectePlateau(p, const.ROUGE)
     lst += detecter4horizontalPlateau(p, const.JAUNE) + detecter4verticalPlateau(p, const.JAUNE) + detecter4diagonaleDirectePlateau(p, const.JAUNE) + detecter4diagonaleIndirectePlateau(p, const.JAUNE)
     return lst
+
+def placerPionLignePlateau(p:list, pion:dict, nbL:int, left:bool)->tuple:
+    """
+    Place le pion sur la ligne indiquée par la gauche si le booléen left vaut True ou par la droite sinon, en poussant les éventuels pions existants sur la ligne
+
+    :param p: un plateau (liste)
+    :param pion: un pion (dictionnaire)
+    :param nbL: un numéro de ligne (entre 0 et 5)
+    :param left: True si le pion est poussé par la gauche, False s’il est poussé par la droite du plateau
+    :return: un tuple constitué de la liste des pions poussés (commençant par le pion ajouté) et un entier correspondant au numéro de ligne où se retrouve le dernier pion de la liste ou None si le dernier pion ne change pas de ligne
+    """
+
+    if type_plateau(p) == False:
+        raise TypeError("placerPionLignePlateau : Le premier paramètre n’est pas un plateau")
+
+    if type_pion(pion) == False:
+        raise TypeError("placerPionLignePlateau : Le deuxième paramètre n’est pas un pion")
+
+    if type(nbL) != int:
+        raise TypeError("placerPionLignePlateau : Le troisième paramètre n’est pas un entier")
+
+    if nbL < 0 and nbL > const.NB_LINES - 1:
+        raise ValueError(f"placerPionLignePlateau : Le troisième paramètre {nbL} ne désigne pas une ligne")
+
+    if type(left) != bool:
+        raise TypeError("placerPionLignePlateau : le quatrième paramètre n’est pas un booléen")
+
+    lst = []
+    i = None
+    if left:
+        c = 0
+        temp = pion
+        while c <= const.NB_COLUMNS and temp != None:
+            if c < const.NB_COLUMNS:
+                temp2 = p[nbL][c]
+                p[nbL][c] = temp
+            else:
+                i = const.NB_LINES
+
+            lst.append(temp)
+            temp = temp2
+
+            c += 1
+        c -= 1
+    else:
+        c = const.NB_COLUMNS-1
+        temp = pion
+        while c >= -1 and temp != None:
+            if c > -1:
+                temp2 = p[nbL][c]
+                p[nbL][c] = temp
+            else:
+                i = const.NB_LINES
+
+            lst.append(temp)
+            temp = temp2
+
+            c -= 1
+        c += 1
+
+    if temp==None:
+        i = nbL
+        while i < const.NB_LINES - 1 and p[i + 1][c] == None:
+            i += 1
+
+        if i != nbL:
+            p[i][c] = p[nbL][c]
+            p[nbL][c] = None
+        else:
+            i = None
+
+    return (lst, i)
