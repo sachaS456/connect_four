@@ -11,5 +11,4 @@ for _ in range(35):
     placerPionPlateau(p, construirePion(choice(const.COULEURS)), randint(0, const.NB_COLUMNS - 1))
 print(toStringPlateau(p))
 
-print(detecter4diagonaleIndirectePlateau(p, const.ROUGE))
-print(detecter4diagonaleIndirectePlateau(p, const.JAUNE))
+print(getPionsGagnantsPlateau(p))

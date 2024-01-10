@@ -296,4 +296,7 @@ def getPionsGagnantsPlateau(p:dict)->list:
     if type_plateau(p) == False:
         raise TypeError("getPionsGagnantsPlateau : Le paramètre n’est pas un plateau")
 
-    return detecter4horizontalPlateau() + detecter4verticalPlateau() + detecter4diagonaleDirectePlateau() + detecter4diagonaleIndirectePlateau()
+    lst = []
+    lst += detecter4horizontalPlateau(p, const.ROUGE) + detecter4verticalPlateau(p, const.ROUGE) + detecter4diagonaleDirectePlateau(p, const.ROUGE) + detecter4diagonaleIndirectePlateau(p, const.ROUGE)
+    lst += detecter4horizontalPlateau(p, const.JAUNE) + detecter4verticalPlateau(p, const.JAUNE) + detecter4diagonaleDirectePlateau(p, const.JAUNE) + detecter4diagonaleIndirectePlateau(p, const.JAUNE)
+    return lst
