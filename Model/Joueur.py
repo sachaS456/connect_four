@@ -148,10 +148,20 @@ def _placerPionJoueur(j:dict)->int:
     :return: un entier représentant la colonne
     """
 
-    nb = random.randint(0, const.NB_COLUMNS - 1)
+    nb = 0
     p = getPlateauJoueur(j)
-    while p[0][nb] != None:
+
+    if getModeEtenduJoueur(j) == False:
         nb = random.randint(0, const.NB_COLUMNS - 1)
+        while p[0][nb] != None:
+            nb = random.randint(0, const.NB_COLUMNS - 1)
+    else:
+        nb = random.randint(-const.NB_LINES, const.NB_COLUMNS + const.NB_LINES - 1)
+
+        if nb >= 0 and nb < const.NB_COLUMNS:
+            while p[0][nb] != None:
+                nb = random.randint(-const.NB_LINES, const.NB_COLUMNS + const.NB_LINES - 1)
+
     return nb
 
 def initialiserIAJoueur(j:dict, premier:bool)->None:
