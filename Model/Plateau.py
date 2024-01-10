@@ -372,3 +372,28 @@ def placerPionLignePlateau(p:list, pion:dict, nbL:int, left:bool)->tuple:
             i = None
 
     return (lst, i)
+
+def encoderPlateau(p:dict)->str:
+    """
+    Encode le tableau sous cette forme:
+        -Une case contenant None sera représentée par le caractère « souligné » "_".
+        -Une case contenant un pion rouge sera représentée par le caractère "R".
+        -Une case contenant un pion jaune sera représentée par le caractère "J".
+
+    :param p: un plateau
+    :return: une chaîne de caractères correspondant à l’encodage
+    """
+
+    enc = ""
+    for l in range(const.NB_LINES):
+        for c in range(const.NB_COLUMNS):
+            if p[l][c] == None:
+                enc += "_"
+            elif getCouleurPion(p[l][c]) == const.ROUGE:
+                enc += "R"
+            else:
+                enc += "J"
+    return enc
+
+
+
