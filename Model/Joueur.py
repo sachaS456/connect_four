@@ -101,3 +101,39 @@ def getPionJoueur(j:dict)->dict:
         raise TypeError("getPionJoueur : Le paramètre ne correspond pas à un joueur")
 
     return construirePion(getCouleurJoueur(j))
+
+def setPlateauJoueur(j:dict, p:dict)->None:
+    """
+    Affecte le plateau au joueur
+
+    :param j: représente un joueur
+    :param p: représente un plateau
+    :return: rien
+    """
+
+    if type_joueur(j) == False:
+        raise TypeError("setPlateauJoueur : Le premier paramètre ne correspond pas à un joueur")
+
+    if type_plateau(p) == False:
+        raise TypeError("setPlateauJoueur : Le second paramètre ne correspond pas à un plateau")
+
+    j[const.PLATEAU] = p
+    return None
+
+def setPlacerPionJoueur(j:dict, fn:callable)->None:
+    """
+    Affecte la fonction au joueur
+
+    :param j: représente un joueur
+    :param fn: représente une fonction
+    :return: rien
+    """
+
+    if type_joueur(j) == False:
+        raise TypeError("setPlacerPionJoueur : Le premier paramètre ne correspond pas à un joueur")
+
+    if callable(fn) == False:
+        raise TypeError("setPlacerPionJoueur : Le second paramètre ne correspond pas à une fonction")
+
+    j[const.PLACER_PION] = fn
+    return None
