@@ -285,3 +285,15 @@ def detecter4diagonaleIndirectePlateau(p:dict, col:int)->list:
             for i in range(loc-a, loc):
                 lst.append(p[const.NB_LINES-i-1-diago][i])
     return lst
+
+def getPionsGagnantsPlateau(p:dict)->list:
+    """
+    recherche les pions alignés pour les deux couleurs
+
+    :param p: plateau où la recherche est faite
+    :return: liste de toutes les séries de 4 pions alignés trouvées
+    """
+    if type_plateau(p) == False:
+        raise TypeError("getPionsGagnantsPlateau : Le paramètre n’est pas un plateau")
+
+    return detecter4horizontalPlateau() + detecter4verticalPlateau() + detecter4diagonaleDirectePlateau() + detecter4diagonaleIndirectePlateau()
