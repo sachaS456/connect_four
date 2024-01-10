@@ -421,5 +421,5 @@ def isPatPlateau(p:list, h:dict)->bool:
         h[s] += 1
         r = h[s] >= 5
     else:
-        h += { s: 1}
+        h[s] = 1
     return r
