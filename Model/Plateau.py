@@ -227,3 +227,61 @@ def detecter4diagonaleDirectePlateau(p:dict, col:int)->list:
             for i in range(loc-a, loc):
                 lst.append(p[i+diago][i])
     return lst
+
+def detecter4diagonaleIndirectePlateau(p:dict, col:int)->list:
+    """
+    Détecte s'il y a 4 pions alignés en diagonale Indirecte
+
+    :param p: plateau à vérifier
+    :param col: couleur à vérifier
+    :return: la list est vide il n’y a aucune série de 4 pions alignés en diagonale Indirecte, sinon une liste de pions de la couleur donnée en paramètre qui sont alignés par 4
+    """
+
+    if type_plateau(p) == False:
+        raise TypeError("detecter4diagonaleIndirectePlateau : Le premier paramètre ne correspond pas à un plateau")
+
+    if type(col) != int:
+        raise TypeError("detecter4diagonaleIndirectePlateau : le second paramètre n’est pas un entier")
+
+    if col not in const.COULEURS:
+        raise ValueError(f"detecter4diagonaleIndirectePlateau : La valeur de la couleur {col} n’est pas correcte")
+
+    lst = []
+    for diago in range(1, 4):
+        #print()
+        loc = 0
+        a = 0
+        while loc < const.NB_LINES - (diago-1) and a < 4:
+
+            if p[const.NB_LINES-loc-1][loc+diago] == None:
+                a = 0
+            elif p[const.NB_LINES-loc-1][loc + diago][const.COULEUR] == col:
+                a += 1
+            else:
+                a = 0
+            #print((const.NB_LINES-loc-1), loc + diago, a)
+            loc+=1
+
+        if a >= 4:
+            for i in range(loc-a, loc):
+                lst.append(p[(const.NB_LINES-1)-i][i + diago])
+
+    for diago in range(0, 3):
+        #print()
+        loc = 0
+        a = 0
+        while loc < const.NB_LINES - diago and a < 4:
+
+            if p[const.NB_LINES-loc-1 - diago][loc] == None:
+                a = 0
+            elif p[const.NB_LINES-loc-1 - diago][loc][const.COULEUR] == col:
+                a += 1
+            else:
+                a = 0
+            #print(const.NB_LINES-loc-1 - diago, loc, a)
+            loc += 1
+
+        if a >= 4:
+            for i in range(loc-a, loc):
+                lst.append(p[const.NB_LINES-i-1-diago][i])
+    return lst
