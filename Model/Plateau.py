@@ -384,6 +384,9 @@ def encoderPlateau(p:dict)->str:
     :return: une chaîne de caractères correspondant à l’encodage
     """
 
+    if type_plateau(p) == False:
+        raise TypeError("encoderPlateau : Le paramètre n’est pas un plateau")
+
     enc = ""
     for l in range(const.NB_LINES):
         for c in range(const.NB_COLUMNS):
@@ -395,5 +398,28 @@ def encoderPlateau(p:dict)->str:
                 enc += "J"
     return enc
 
+def isPatPlateau(p:list, h:dict)->bool:
+    """
+    Encode le plateau dans une chaîne de caractères et recherche cette chaîne de caractères (laclé) dans le dictionnaire (histogramme de plateaux) passé en paramètre.
+        - Si elle s’y trouve, la fonction incrémente d’une unité la valeur (type int) correspondante du dictionnaire (histogramme de plateau). Si cette valeur atteint 5 (ou est supérieure), la fonction retourne True, sinon elle retourne False.
+        - Si la chaîne ne s’y trouve pas, la fonction rajoute cette clé dans le dictionnaire (histogramme de plateau), affecte la valeur 1 à cette clé (c’est la première fois qu’on obtient ce plateau) et retourne False.
 
+    :param p: un plateau
+    :param h: dictionnaire correspondant à l’histogramme des plateaux
+    :return: True si c’est la 5ième fois qu’on rencontre le plateau, False sinon
+    """
 
+    if type_plateau(p) == False:
+        raise TypeError("isPatPlateau : Le premier paramètre n’est pas un plateau")
+
+    if type(h) != dict:
+        raise TypeError("isPatPlateau : Le second paramètre n’est pas un dictionnaire")
+
+    s = encoderPlateau(p)
+    r = False
+    if s in h:
+        h[s] += 1
+        r = h[s] >= 5
+    else:
+        h += { s: 1}
+    return r
