@@ -49,3 +49,42 @@ def construireJoueur(col:int)->dict:
         raise ValueError(f"construireJoueur : L’entier donné {col} n’est pas une couleur.")
 
     return {const.COULEUR: col, const.PLATEAU: None, const.PLACER_PION: None}
+
+def getCouleurJoueur(j:dict)->int:
+    """
+    Determine la couleur de pion d'un joueur
+
+    :param j: joueur ciblé
+    :return: couleur de pion du joueur
+    """
+
+    if type_joueur(j) == False:
+        raise TypeError("getCouleurJoueur : Le paramètre ne correspond pas à un joueur")
+
+    return j[const.COULEUR]
+
+def getPlateauJoueur(j:dict)->dict:
+    """
+    Determine le plateau
+
+    :param j: joueur ciblé
+    :return: plateau du joueur
+    """
+
+    if type_joueur(j) == False:
+        raise TypeError("getPlateauJoueur : Le paramètre ne correspond pas à un joueur")
+
+    return j[const.PLATEAU]
+
+def getPlacerPionJoueur(j:dict)->callable:
+    """
+    Determine la fonction qui permet de faire jouer le joueur
+
+    :param j: joueur ciblé
+    :return: fonction contenue dans ce dictionnaire
+    """
+
+    if type_joueur(j) == False:
+        raise TypeError("getPlacerPionJoueur : Le paramètre ne correspond pas à un joueur")
+
+    return j[const.PLACER_PION]
