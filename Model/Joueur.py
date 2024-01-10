@@ -1,3 +1,5 @@
+import random
+
 from Model.Constantes import *
 from Model.Pion import *
 from Model.Plateau import *
@@ -136,4 +138,36 @@ def setPlacerPionJoueur(j:dict, fn:callable)->None:
         raise TypeError("setPlacerPionJoueur : Le second paramètre ne correspond pas à une fonction")
 
     j[const.PLACER_PION] = fn
+    return None
+
+def _placerPionJoueur(j:dict)->int:
+    """
+    Donne une colonne où un pion peut être dans une colonne disponible de façon aléatoire
+
+    :param j: représente un joueur
+    :return: un entier représentant la colonne
+    """
+
+    nb = random.randint(0, const.NB_COLUMNS - 1)
+    p = getPlateauJoueur(j)
+    while p[0][nb] != None:
+        nb = random.randint(0, const.NB_COLUMNS - 1)
+    return nb
+
+def initialiserIAJoueur(j:dict, premier:bool)->None:
+    """
+    Affecte la fonction _placerPionJoueur au joueur passé en paramètre
+
+    :param j: représente un joueur
+    :param premier: indique si le joueur joue en premier (True) ou en second (False)
+    :return: rien
+    """
+
+    if type_joueur(j) == False:
+        raise TypeError("initialiserIAJoueur : Le premier paramètre n’est pas un joueur")
+
+    if type(premier) != bool:
+        raise TypeError("initialiserIAJoueur : Le second paramètre n’est pas un booléen")
+
+    setPlacerPionJoueur(j, _placerPionJoueur)
     return None
