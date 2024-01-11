@@ -89,9 +89,9 @@ def toStringPlateau(p: list) -> str:
             case = p[i][j]
             if case == None:
                 case = " "
-            elif case[const.COULEUR] == const.ROUGE:
+            elif getCouleurPion(case) == const.ROUGE:
                 case = "\x1B[41m \x1B[0m"
-            elif case[const.COULEUR] == const.JAUNE:
+            elif getCouleurPion(case) == const.JAUNE:
                 case = "\x1B[43m \x1B[0m"
 
             r += f"{case}|"
@@ -122,7 +122,7 @@ def detecter4horizontalPlateau(p:list, col:int)->list:
         while a < 4 and c < const.NB_COLUMNS:
             if p[l][c] == None:
                 a = 0
-            elif p[l][c][const.COULEUR] == col:
+            elif getCouleurPion(p[l][c])== col:
                 a+= 1
             else:
                 a = 0
@@ -159,7 +159,7 @@ def detecter4verticalPlateau(p:list, col:int)->list:
         while l < const.NB_LINES and a < 4:
             if p[l][c] == None:
                 a = 0
-            elif p[l][c][const.COULEUR] == col:
+            elif getCouleurPion(p[l][c]) == col:
                 a+= 1
             else:
                 a = 0
@@ -197,7 +197,7 @@ def detecter4diagonaleDirectePlateau(p:list, col:int)->list:
 
             if p[loc][loc+diago] == None:
                 a = 0
-            elif p[loc][loc + diago][const.COULEUR] == col:
+            elif getCouleurPion(p[loc][loc + diago]) == col:
                 a += 1
             else:
                 a = 0
@@ -216,7 +216,7 @@ def detecter4diagonaleDirectePlateau(p:list, col:int)->list:
 
             if p[loc + diago][loc] == None:
                 a = 0
-            elif p[loc + diago][loc][const.COULEUR] == col:
+            elif getCouleurPion(p[loc + diago][loc]) == col:
                 a += 1
             else:
                 a = 0
@@ -255,7 +255,7 @@ def detecter4diagonaleIndirectePlateau(p:list, col:int)->list:
 
             if p[const.NB_LINES-loc-1][loc+diago] == None:
                 a = 0
-            elif p[const.NB_LINES-loc-1][loc + diago][const.COULEUR] == col:
+            elif getCouleurPion(p[const.NB_LINES-loc-1][loc + diago]) == col:
                 a += 1
             else:
                 a = 0
@@ -274,7 +274,7 @@ def detecter4diagonaleIndirectePlateau(p:list, col:int)->list:
 
             if p[const.NB_LINES-loc-1 - diago][loc] == None:
                 a = 0
-            elif p[const.NB_LINES-loc-1 - diago][loc][const.COULEUR] == col:
+            elif getCouleurPion(p[const.NB_LINES-loc-1 - diago][loc]) == col:
                 a += 1
             else:
                 a = 0
