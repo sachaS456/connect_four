@@ -301,6 +301,28 @@ def getPionsGagnantsPlateau(p:dict)->list:
     lst += detecter4horizontalPlateau(p, const.JAUNE) + detecter4verticalPlateau(p, const.JAUNE) + detecter4diagonaleDirectePlateau(p, const.JAUNE) + detecter4diagonaleIndirectePlateau(p, const.JAUNE)
     return lst
 
+def isRempliPlateau(p:list)->bool:
+    """
+    Permet de savoir si le plateau est rempli
+
+    :param p: un plateau
+    :return: True si le plateau est complètement rempli de pions, False sinon
+    """
+
+    if type_plateau(p) == False:
+        raise TypeError("isRempliPlateau : Le paramètre n’est pas un plateau")
+
+    r = True
+    i = 0
+    while i < len(p) and r:
+        j = 0
+        while j < len(p[i]) and r:
+            r = p[i][j] != None
+            j+=1
+        i+=1
+
+    return r
+
 def placerPionLignePlateau(p:list, pion:dict, nbL:int, left:bool)->tuple:
     """
     Place le pion sur la ligne indiquée par la gauche si le booléen left vaut True ou par la droite sinon, en poussant les éventuels pions existants sur la ligne
