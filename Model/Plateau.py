@@ -170,7 +170,7 @@ def detecter4verticalPlateau(p:list, col:int)->list:
                 lst.append(p[i][c])
     return lst
 
-def detecter4diagonaleDirectePlateau(p:dict, col:int)->list:
+def detecter4diagonaleDirectePlateau(p:list, col:int)->list:
     """
     Détecte s'il y a 4 pions alignés en diagonale Directe
 
@@ -228,7 +228,7 @@ def detecter4diagonaleDirectePlateau(p:dict, col:int)->list:
                 lst.append(p[i+diago][i])
     return lst
 
-def detecter4diagonaleIndirectePlateau(p:dict, col:int)->list:
+def detecter4diagonaleIndirectePlateau(p:list, col:int)->list:
     """
     Détecte s'il y a 4 pions alignés en diagonale Indirecte
 
@@ -286,7 +286,7 @@ def detecter4diagonaleIndirectePlateau(p:dict, col:int)->list:
                 lst.append(p[const.NB_LINES-i-1-diago][i])
     return lst
 
-def getPionsGagnantsPlateau(p:dict)->list:
+def getPionsGagnantsPlateau(p:list)->list:
     """
     recherche les pions alignés pour les deux couleurs
 
@@ -395,7 +395,7 @@ def placerPionLignePlateau(p:list, pion:dict, nbL:int, left:bool)->tuple:
 
     return (lst, i)
 
-def encoderPlateau(p:dict)->str:
+def encoderPlateau(p:list)->str:
     """
     Encode le tableau sous cette forme:
         -Une case contenant None sera représentée par le caractère « souligné » "_".
