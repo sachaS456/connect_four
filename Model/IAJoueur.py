@@ -50,7 +50,7 @@ def _placerPionJoueur2(j:dict)->int:
 
     return nb
 
-def PropositionPos(p:list, col:int, n):
+def PropositionPos(p:list, col:int, n:int)->list:
     """
     propose des positions de pion pour poser des pions autour de l'alignement de n pion cela
     peut permettre soit d'empêcher l'adversaire de gagné soit gagné
