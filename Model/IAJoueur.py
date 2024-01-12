@@ -65,49 +65,52 @@ def PropositionPos(p:list, col:int, n:int)->list:
     pos = []
 
     lst = detecterNhorizontalPlateau(p, col, n)
-    #print(lst)
+    print(lst)
     if len(lst) > 0:
-        for i in range(0, len(lst) - n, n):
-            pos.append(getPosPion(lst[i], p))
-            pos[len(pos) - 1][1] += 1
-        for i in range(n, len(lst), n):
+        for i in range(0, len(lst) - n+1, n):
             pos.append(getPosPion(lst[i], p))
             pos[len(pos) - 1][1] -= 1
+        for i in range(n-1, len(lst), n):
+            pos.append(getPosPion(lst[i], p))
+            pos[len(pos) - 1][1] += 1
+        print(pos)
 
     lst = detecterNverticalPlateau(p, col, n)
     #print(lst, len(lst))
     if len(lst) > 0:
-        for i in range(0, len(lst)-2, n):
+        for i in range(0, len(lst)-n+1, n):
             pos.append(getPosPion(lst[i], p))
             pos[len(pos) - 1][0] -= 1
 
     lst = detecterNdiagonaleDirectePlateau(p, col, n)
     #print(lst)
-    for i in range(0, len(lst) - n, n):
-        pos.append(getPosPion(lst[i], p))
-        pos[len(pos) - 1][1] += 1
-        pos[len(pos) - 1][0] += 1
-    for i in range(n, len(lst), n):
+    for i in range(0, len(lst) - n+1, n):
         pos.append(getPosPion(lst[i], p))
         pos[len(pos) - 1][1] -= 1
         pos[len(pos) - 1][0] -= 1
+    for i in range(n-1, len(lst), n):
+        pos.append(getPosPion(lst[i], p))
+        pos[len(pos) - 1][1] += 1
+        pos[len(pos) - 1][0] += 1
 
     lst = detecterNdiagonaleIndirectePlateau(p, col, n)
     #print(lst)
-    for i in range(0, len(lst) - n, n):
-        pos.append(getPosPion(lst[i], p))
-        pos[len(pos) - 1][1] += 1
-        pos[len(pos) - 1][0] -= 1
-    for i in range(n, len(lst), n):
+    for i in range(0, len(lst) - n+1, n):
         pos.append(getPosPion(lst[i], p))
         pos[len(pos) - 1][1] -= 1
         pos[len(pos) - 1][0] += 1
+    for i in range(n-1, len(lst), n):
+        pos.append(getPosPion(lst[i], p))
+        pos[len(pos) - 1][1] += 1
+        pos[len(pos) - 1][0] -= 1
 
     #print(pos)
 
+    j = 0
     for i in range(len(pos)):
-        if pos[i][0] > const.NB_LINES or pos[i][0] < 0 or pos[i][1] > const.NB_COLUMNS or pos[i][1] < 0 or p[pos[i][0]][pos[i][1]] != None:
-            del (pos[i])
+        if pos[i-j][0] >= const.NB_LINES or pos[i-j][0] < 0 or pos[i-j][1] >= const.NB_COLUMNS or pos[i-j][1] < 0 or p[pos[i-j][0]][pos[i-j][1]] != None:
+            del (pos[i-j])
+            j+=1
 
     #print(pos)
     #print()
