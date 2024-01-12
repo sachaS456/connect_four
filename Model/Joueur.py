@@ -5,7 +5,6 @@ from Model.Pion import *
 from Model.Plateau import *
 
 
-
 #
 # Ce fichier contient les fonctions gérant le joueur
 #
@@ -179,7 +178,8 @@ def initialiserIAJoueur(j:dict, premier:bool)->None:
     if type(premier) != bool:
         raise TypeError("initialiserIAJoueur : Le second paramètre n’est pas un booléen")
 
-    setPlacerPionJoueur(j, _placerPionJoueur)
+    from Model.IAJoueur import _placerPionJoueur2
+    setPlacerPionJoueur(j, _placerPionJoueur2)
     return None
 
 def getModeEtenduJoueur(j:dict)->bool:
