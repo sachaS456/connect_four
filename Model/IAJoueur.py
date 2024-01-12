@@ -63,7 +63,6 @@ def PropositionPos(p:list, col:int, n:int)->list:
 
     # position possible  => (position pion possible = [ligne, colonne])
     pos = []
-    n = 3
 
     lst = detecterNhorizontalPlateau(p, col, n)
     #print(lst)
