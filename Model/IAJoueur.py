@@ -28,7 +28,7 @@ def _placerPionJoueur2(j:dict)->int:
 
         i = 0
         loop = True
-        while i < 4 and loop:
+        while i < 5 and loop:
             pos = []
             # plus i à une valeur plus faible plus la recherche est prioritaire
             if i == 0:
@@ -38,6 +38,9 @@ def _placerPionJoueur2(j:dict)->int:
                 # recherche les positions qui permette d'empêcher l'adversaire de gagné
                 pos += PropositionPos(p, colAdv, 3, False)
             elif i == 2:
+                # detecte le piege où on met un pion puis après un trou puis un pion
+                pos += detecterPiegePlateau(p, colAdv)
+            elif i == 3:
                 # recherche les positions qui permette d'empêcher l'adversaire d'aligné un troisième pion (cela permet de resister à certain piège)
                 pos += PropositionPos(p, colAdv, 2, False)
             else:
@@ -62,7 +65,7 @@ def _placerPionJoueur2(j:dict)->int:
 
         i = 0
         loop = True
-        while i < 4 and loop:
+        while i < 5 and loop:
             pos = []
             # plus i à une valeur plus faible plus la recherche est prioritaire
             if i == 0:
@@ -72,6 +75,9 @@ def _placerPionJoueur2(j:dict)->int:
                 # recherche les positions qui permette d'empêcher l'adversaire de gagné
                 pos += PropositionPos(p, colAdv, 3, True)
             elif i == 2:
+                # detecte le piege où on met un pion puis après un trou puis un pion
+                pos += detecterPiegePlateau(p, colAdv)
+            elif i == 3:
                 # recherche les positions qui permette d'empêcher l'adversaire d'aligné un troisième pion (cela permet de resister à certain piège)
                 pos += PropositionPos(p, colAdv, 2, True)
             else:
@@ -219,6 +225,50 @@ def getPosPion(pion:dict, p:list)->list:
         l = -1
 
     return [l, c]
+
+def detecterPiegePlateau(p:list, col:int)->list:
+    """
+    detecte un piège sur le plateau
+
+    :param p: un plateau
+    :param col: une couleur
+    :return: une position
+    """
+
+    if type_plateau(p) == False:
+        raise TypeError("detecterNhorizontalPlateau : Le premier paramètre ne correspond pas à un plateau")
+
+    if type(col) != int:
+        raise TypeError("detecterNhorizontalPlateau : le second paramètre n’est pas un entier")
+
+    if col not in const.COULEURS:
+        raise ValueError(f"detecterNhorizontalPlateau : La valeur de la couleur {col} n’est pas correcte")
+
+    pos = []
+    for l in range(const.NB_LINES):
+        c = 0
+        a = 0
+
+        while a < 3 and c < const.NB_COLUMNS:
+            if a <= 0 and p[l][c] == None:
+                a = 0
+            elif a > 0 and p[l][c] == None:
+                if p[l][c-1] != None:
+                    a +=1
+                else:
+                    a = 0
+            elif getCouleurPion(p[l][c]) == col:
+                a+= 1
+            else:
+                a = 0
+            c += 1
+
+
+        if a >= 3:
+            for i in range(c-a, c):
+                if p[l][i] == None:
+                    pos.append([l, i])
+    return pos
 
 def detecterNhorizontalPlateau(p:list, col:int, n:int)->list:
     """
