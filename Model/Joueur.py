@@ -195,7 +195,7 @@ def getModeEtenduJoueur(j:dict)->bool:
 
     return const.MODE_ETENDU in j
 
-def setModeEtenduJoueur(j:dict, b:bool = True)->None:
+def setModeEtenduJoueur(j:dict, b = True)->None:
     """
     Ajoute ou supprime la clé const.MODE_ETENDU dans le dictionnaire représentant le joueur en fonction du booléen
 
@@ -212,7 +212,7 @@ def setModeEtenduJoueur(j:dict, b:bool = True)->None:
     if b:
         j[const.MODE_ETENDU] = True
     else:
-        if j[const.MODE_ETENDU] in j:
-            j.pop(const.MODE_ETENDU)
+        if getModeEtenduJoueur(j):
+            del(j[const.MODE_ETENDU])
 
     return None
