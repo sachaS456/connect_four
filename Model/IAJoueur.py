@@ -22,42 +22,112 @@ def _placerPionJoueur2(j:dict)->int:
         colAdv = const.JAUNE
 
     if getModeEtenduJoueur(j) == False:
-        # return = 0, const.NB_COLUMNS - 1
         nb = random.randint(0, const.NB_COLUMNS - 1)
         while p[0][nb] != None:
             nb = random.randint(0, const.NB_COLUMNS - 1)
 
-        for i in range(4):
+        i = 0
+        loop = True
+        while i < 4 and loop:
             pos = []
+            # plus i à une valeur plus faible plus la recherche est prioritaire
             if i == 0:
-                pos += PropositionPos(p, col, 3)
+                # recherche les positions qui permette de gagné
+                pos += PropositionPos(p, col, 3, False)
             elif i == 1:
-                pos += PropositionPos(p, colAdv, 3)
+                # recherche les positions qui permette d'empêcher l'adversaire de gagné
+                pos += PropositionPos(p, colAdv, 3, False)
             elif i == 2:
-                pos += PropositionPos(p, colAdv, 2)
+                # recherche les positions qui permette d'empêcher l'adversaire d'aligné un troisième pion (cela permet de resister à certain piège)
+                pos += PropositionPos(p, colAdv, 2, False)
             else:
-                pos += PropositionPos(p, col, 2)
+                # recherche les positions qui permette d'aligné un troisième pion (cela permet de construire une attaque)
+                pos += PropositionPos(p, col, 2, False)
 
+            # si position trouvée cela arrête la recherche et choisi aléatoirement dans une des positions stratégiques trouvées
             if len(pos) > 0:
-                # choisi aléatoirement une position qui fait gagné
                 nb = pos[random.randint(0, len(pos)-1)][1]
+                loop = False
+            i+=1
     else:
-        nb = random.randint(-const.NB_LINES, const.NB_COLUMNS + const.NB_LINES - 1)
+        # innutile d'aller sur les côtés cela fait trop attendre l'utilisateur pour rien
+        # nb = random.randint(-const.NB_LINES, const.NB_COLUMNS + const.NB_LINES - 1)
+        nb = random.randint(0, const.NB_COLUMNS - 1)
 
         if nb >= 0 and nb < const.NB_COLUMNS:
             while p[0][nb] != None:
-                nb = random.randint(-const.NB_LINES, const.NB_COLUMNS + const.NB_LINES - 1)
+                # innutile d'aller sur les côtés cela fait trop attendre l'utilisateur pour rien
+                #nb = random.randint(-const.NB_LINES, const.NB_COLUMNS + const.NB_LINES - 1)
+                nb = random.randint(0, const.NB_COLUMNS - 1)
+
+        i = 0
+        loop = True
+        while i < 4 and loop:
+            pos = []
+            # plus i à une valeur plus faible plus la recherche est prioritaire
+            if i == 0:
+                # recherche les positions qui permette de gagné
+                pos += PropositionPos(p, col, 3, True)
+            elif i == 1:
+                # recherche les positions qui permette d'empêcher l'adversaire de gagné
+                pos += PropositionPos(p, colAdv, 3, True)
+            elif i == 2:
+                # recherche les positions qui permette d'empêcher l'adversaire d'aligné un troisième pion (cela permet de resister à certain piège)
+                pos += PropositionPos(p, colAdv, 2, True)
+            else:
+                # recherche les positions qui permette d'aligné un troisième pion (cela permet de construire une attaque)
+                pos += PropositionPos(p, col, 2, True)
+
+            # si position trouvée cela arrête la recherche et choisi aléatoirement dans une des positions stratégiques trouvées en gérant les côtés
+            if len(pos) > 0:
+                # choisi aléatoirement dans une des positions stratégiques trouvées
+                loop = False
+                nbP = []
+                for i2 in pos:
+                    # selectionne les positions qui contienne un pion
+                    if p[i2[0]][i2[1]] != None:
+                        if i2[1] == 0:
+                            nbP.append((const.NB_COLUMNS) - i2[0]) # NB_c - ligne
+                        elif i2[1] == 6:
+                            nbP.append((const.NB_COLUMNS) + i2[0]) # NB_c + ligne
+                        else:
+                            # réactive la boucle car ce sont des positions non prioritaire
+                            loop = True
+
+                            # si sur le coté droit c'est un pion de couleur adverse mettre le pion de ce côté
+                            if p[i2[0]][const.NB_COLUMNS-1] != None and getCouleurPion(p[i2[0]][const.NB_COLUMNS-1]) == colAdv:
+                                nbP.append(const.NB_COLUMNS + i2[0])  # NB_c + ligne
+
+                            # sinon si sur le coté gauche c'est un pion de couleur adverse mettre le pion de ce côté
+                            elif p[i2[0]][0] != None and getCouleurPion(p[i2[0]][0]) == colAdv:
+                                nbP.append(const.NB_COLUMNS - i2[0])  # NB_c - ligne
+
+                            # sinon choisi aléatoirement un côté
+                            else:
+                                if random.randint(0, 1) == 0:
+                                    nbP.append(const.NB_COLUMNS + i2[0])
+                                else:
+                                    nbP.append(const.NB_COLUMNS - i2[0])
+                    else:
+                        nbP.append(i2[1])
+
+                nb = nbP[random.randint(0, len(pos)-1)]
+            i +=1
 
     return nb
 
-def PropositionPos(p:list, col:int, n:int)->list:
+def PropositionPos(p:list, col:int, n:int, etendu:bool)->list:
     """
-    propose des positions de pion pour poser des pions autour de l'alignement de n pion cela
-    peut permettre soit d'empêcher l'adversaire de gagné soit gagné
+    Propose des positions de pion à poser autour de l'alignement de n pion cela
+    peut permettre soit d'empêcher l'adversaire d'aligner ses pions ou bien essayer
+    d'aligner ses propre pions suivant la couleur choisie (col),
+    si la couleur choisie est celle de l'adversaire la stratégie choisie est défensive
+    sinon elle est offensive
 
     :param p: plateau
     :param col: couleur du joueur ia
     :param n: n pion alignée
+    :param etendu: boleen qui permet de prendre en charge le mode étendu
     :return: une liste de position possible
     """
 
@@ -65,7 +135,7 @@ def PropositionPos(p:list, col:int, n:int)->list:
     pos = []
 
     lst = detecterNhorizontalPlateau(p, col, n)
-    print(lst)
+    #print(lst)
     if len(lst) > 0:
         for i in range(0, len(lst) - n+1, n):
             pos.append(getPosPion(lst[i], p))
@@ -83,7 +153,7 @@ def PropositionPos(p:list, col:int, n:int)->list:
             pos[len(pos) - 1][0] -= 1
 
     lst = detecterNdiagonaleDirectePlateau(p, col, n)
-    #print(lst)
+    print(lst)
     for i in range(0, len(lst) - n+1, n):
         pos.append(getPosPion(lst[i], p))
         pos[len(pos) - 1][1] -= 1
@@ -94,7 +164,7 @@ def PropositionPos(p:list, col:int, n:int)->list:
         pos[len(pos) - 1][0] += 1
 
     lst = detecterNdiagonaleIndirectePlateau(p, col, n)
-    #print(lst)
+    print(lst)
     for i in range(0, len(lst) - n+1, n):
         pos.append(getPosPion(lst[i], p))
         pos[len(pos) - 1][1] -= 1
@@ -108,11 +178,11 @@ def PropositionPos(p:list, col:int, n:int)->list:
 
     j = 0
     for i in range(len(pos)):
-        if pos[i-j][0] >= const.NB_LINES or pos[i-j][0] < 0 or pos[i-j][1] >= const.NB_COLUMNS or pos[i-j][1] < 0 or p[pos[i-j][0]][pos[i-j][1]] != None:
+        if pos[i-j][0] >= const.NB_LINES or pos[i-j][0] < 0 or pos[i-j][1] >= const.NB_COLUMNS or pos[i-j][1] < 0 or (p[pos[i-j][0]][pos[i-j][1]] != None and etendu == False) or (pos[i-j][0]+1 < const.NB_LINES and p[pos[i-j][0]+1][pos[i-j][1]] == None):
             del (pos[i-j])
             j+=1
 
-    #print(pos)
+    print(pos)
     #print()
     return pos
 
